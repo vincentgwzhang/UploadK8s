@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upload-app
+  template:
+    metadata:
+      labels:
+        app: upload-app
+    spec:
+      containers:
+        - name: upload
+          image: vincentgwzhang/upload
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: "/mnt/cifs/main/provisional/memofilesFalse"
+              name: memofiles-volume
+      volumes:
+        - name: memofiles-volume
+          persistentVolumeClaim:
+            claimName: memofiles-pvc
